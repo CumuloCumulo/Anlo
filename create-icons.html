@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>生成图标</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // 生成三个尺寸的图标
+    const sizes = [16, 48, 128];
+    
+    sizes.forEach(size => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      // 背景
+      ctx.fillStyle = '#1a73e8';
+      ctx.fillRect(0, 0, size, size);
+      
+      // 绘制一个输入框图标
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = size / 16;
+      ctx.fillStyle = '#ffffff';
+      
+      // 外框
+      const padding = size * 0.2;
+      ctx.strokeRect(padding, padding, size - padding * 2, size - padding * 2);
+      
+      // 光标
+      const cursorX = size * 0.35;
+      const cursorY1 = size * 0.35;
+      const cursorY2 = size * 0.65;
+      ctx.beginPath();
+      ctx.moveTo(cursorX, cursorY1);
+      ctx.lineTo(cursorX, cursorY2);
+      ctx.lineWidth = size / 12;
+      ctx.stroke();
+      
+      // 下载
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `icon${size}.png`;
+        a.click();
+      });
+    });
+  </script>
+</body>
+</html>
+
