@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "输入框映射工具",
-  "version": "1.0.0",
-  "description": "扫描、记录和重新定位网页输入框的工具，适用于自动化测试和数据填充",
+  "name": "Anlo - 输入框映射工具",
+  "version": "2.0.0",
+  "description": "智能输入框定位工具 - 扫描、记录和重新定位网页输入框，特别适用于烂网页自动化操作",
   "permissions": [
     "activeTab",
     "storage",
@@ -19,7 +19,7 @@
     "default_path": "sidepanel.html"
   },
   "action": {
-    "default_title": "打开输入框映射工具"
+    "default_title": "打开 Anlo 输入框映射工具"
   },
   "content_scripts": [
     {
@@ -29,9 +29,9 @@
     }
   ],
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
 }
 
