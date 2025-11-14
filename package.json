@@ -1,7 +1,7 @@
 {
-  "name": "input-mapper-extension",
-  "version": "2.0.0",
-  "description": "智能输入框定位工具 - TypeScript + React + Webpack 版本",
+  "name": "anlo-page-structure-tool",
+  "version": "2.2.0",
+  "description": "Anlo 页面结构化工具 - 智能元素提取和定位工具 (TypeScript + React + Webpack)",
   "private": true,
   "scripts": {
     "dev": "webpack --mode development --watch",

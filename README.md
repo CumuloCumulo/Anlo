@@ -1,8 +1,8 @@
-# 🎯 Anlo - 输入框映射工具
+# 🎯 Anlo - 页面结构化工具
 
 **现代化版本：TypeScript + React + Material-UI + Webpack**
 
-一个强大的浏览器侧边栏插件，用于扫描、记录和重新定位网页输入框。特别适用于那些动态生成ID、难以定位元素的"烂网页"自动化操作。
+一个强大的浏览器侧边栏插件，用于扫描、记录和重新定位网页中的可提取元素（输入框、文本框、选择框显示值等）。特别适用于那些动态生成ID、难以定位元素的"烂网页"自动化操作和数据提取场景。
 
 ## 📋 项目特点
 
@@ -13,6 +13,9 @@
 - 🎨 **组件化设计** - 易于维护和扩展
 - 🔄 **双向消息通信** - Sidepanel ↔ Content Script ↔ Background
 - 📐 **智能定位** - 自动生成稳定的选择器
+- 🔍 **多元素支持** - 支持 input、textarea、显示元素（select-display、text-display）
+- ✨ **Overlay 高亮** - 固定定位覆盖层，支持隐藏元素高亮
+- 🌊 **呼吸灯动画** - 60fps 流畅脉冲动画，智能性能优化
 
 ## 🏗️ 项目结构
 
@@ -93,7 +96,8 @@ npm run build
 ### 🔤 类型定义（`src/types/index.ts`）
 
 定义了整个系统的数据结构：
-- `InputInfo` - 扫描的输入框信息
+- `ElementType` - 元素类型枚举（input、select-display、text-display）
+- `InputInfo` - 扫描的可提取元素信息
 - `SavedConfig` - 保存的配置
 - `ExtractResult` - 提取结果
 - `Message` - 消息格式
@@ -117,10 +121,12 @@ npm run build
 ### 📄 内容脚本（`src/scripts/content.ts`）
 
 注入到每个网页的脚本：
-- `scanAll()` - 扫描所有输入框
+- `scanAll()` - 扫描所有可提取元素（input、textarea、显示元素等）
+- `getElementType()` - 判断元素类型
+- `getElementValue()` - 根据元素类型提取值
 - `saveByIndexes()` - 根据索引保存配置
-- `extractByConfig()` - 根据配置提取输入框
-- `highlightByIndex()` - 高亮指定输入框
+- `extractByConfig()` - 根据配置重新提取元素
+- `highlightByIndex()` - 高亮指定元素
 - `clearHighlight()` - 清除高亮
 
 ### 🎯 后台服务（`src/scripts/background.ts`）
@@ -145,17 +151,18 @@ npm run build
 
 ```typescript
 // 打开 sidepanel
-// 点击"扫描当前页面所有输入框"
+// 点击"扫描当前页面"
 // ↓
 // Content Script 执行 scanAll()
+// 扫描 input、textarea、显示元素等
 // ↓
-// 返回所有输入框信息
+// 返回所有可提取元素信息
 ```
 
 ### 2️⃣ 选择阶段
 
 ```typescript
-// 在列表中点击勾选需要的输入框
+// 在列表中点击勾选需要的元素
 // ↓
 // React 状态更新，UI 实时反映
 // ↓
@@ -168,6 +175,7 @@ npm run build
 // Content Script 执行 saveByIndexes(indexes)
 // ↓
 // 生成稳定的容器选择器
+// 提取元素类型、data-name、xtype 等元数据
 // ↓
 // 保存到 SavedConfig[]
 // ↓
@@ -179,16 +187,22 @@ npm run build
 ```typescript
 // 刷新页面后
 // 打开 sidepanel
-// 点击"根据配置重新提取输入框"
+// 点击"根据配置重新提取元素"
 // ↓
 // Content Script 执行 extractByConfig(config)
 // ↓
 // 使用多层次的查找策略：
-//   1. 容器选择器 + label 验证
-//   2. name 属性 + label 验证
-//   3. placeholder 查找
+//   针对 input/textarea:
+//     1. 容器选择器 + label 验证
+//     2. name 属性 + label 验证
+//     3. placeholder 查找
+//   针对显示元素:
+//     1. 容器选择器 + label 验证
+//     2. data-name 属性 + label 验证
+//     3. xtype 属性匹配
 // ↓
-// 返回找到的输入框元素
+// 根据元素类型提取值（input.value 或 textContent）
+// 返回找到的元素和提取的值
 ```
 
 ## 🔧 开发指南
@@ -281,7 +295,8 @@ dist/
 ## 🎯 后续功能迭代方向
 
 ### 短期计划
-- [ ] 支持更多元素类型（按钮、链接、下拉框等）
+- [x] 支持多种元素类型（input、textarea、显示元素）
+- [ ] 支持更多元素类型（按钮、链接、原生 select 等）
 - [ ] 本地存储优化（使用 IndexedDB）
 - [ ] 配置管理界面增强
 - [ ] 快捷键支持
@@ -349,5 +364,5 @@ A: 检查浏览器 Console，查看是否有错误消息。
 
 **Made with ❤️ for web automation lovers**
 
-*Anlo - 让烂网页的自动化变得简单*
+*Anlo - 页面结构化工具，让动态网页的数据提取和自动化变得简单*
 

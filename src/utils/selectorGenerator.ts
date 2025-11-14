@@ -127,20 +127,21 @@ export class SelectorGenerator {
   }
 
   /**
-   * 根据配置查找输入框（向后兼容）
+   * 根据配置查找输入框（向后兼容，支持 input 和 textarea）
    */
-  findInputBySelector(selector: string): HTMLInputElement | null {
+  findInputBySelector(selector: string): HTMLInputElement | HTMLTextAreaElement | null {
     try {
       const elements = document.querySelectorAll(selector);
 
       for (const element of elements) {
-        if (element.tagName.toLowerCase() === 'input') {
-          return element as HTMLInputElement;
+        const tagName = element.tagName.toLowerCase();
+        if (tagName === 'input' || tagName === 'textarea') {
+          return element as HTMLInputElement | HTMLTextAreaElement;
         }
 
-        const input = element.querySelector('input:not([type="hidden"]):not([type="submit"]):not([type="button"])');
+        const input = element.querySelector('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea');
         if (input) {
-          return input as HTMLInputElement;
+          return input as HTMLInputElement | HTMLTextAreaElement;
         }
       }
     } catch (e) {
